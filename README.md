@@ -1,2 +1,79 @@
 # Expense-Tracker-App
 hi
+package.xml
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>CreateAndSendCSVFileViaEmail</members>
+		<members>Expense_summary_controller</members>
+		<members>WeeklyDataExportTest</members>
+		<members>expensesTriggerHandler</members>
+		<members>weeklyBackUpScheduler</members>
+		<members>weekly_Data_export</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>Expenses_Tracker</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>Debtor_Person__c</members>
+		<members>Expense__c</members>
+		<members>Retun__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Debtor_Person__c</members>
+		<members>Expense__c</members>
+		<members>Retun__c</members>
+		<members>expenditure_home</members>
+		<members>expense_summariser</members>
+		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>Debtor_Record_Page</members>
+		<members>Expenses_Tracker_UtilityBar</members>
+		<members>expenditure_home</members>
+		<members>expense_summariser</members>
+		<members>expenses_home</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Debtor_Person__c-Debtor Person Layout</members>
+		<members>Expense__c-Expenditure</members>
+		<members>Expense__c-Expense Layout</members>
+		<members>Expense__c-Lend Money</members>
+		<members>Expense__c-Savings</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>LightningComponentBundle</name>
+	</types>
+	<types>
+		<members>unfiled$public/Copy_of_FY2023May24April_Expense_An_cUJ</members>
+		<members>unfiled$public/Copy_of_Overall_FY_20212022_Transaction_eXo</members>
+		<members>unfiled$public/FY20212022_EXPENSE_ANALYSIS_6sk</members>
+		<members>unfiled$public/FY202223_Expense_Analysis_4OW</members>
+		<members>unfiled$public/FY2024May25April_Expense_Analysis_PcV</members>
+		<members>unfiled$public/FY2025May26April_Expense_Analysis_iA2</members>
+		<members>unfiled$public/Last_Month_Transactions_Summary_ZGc</members>
+		<members>unfiled$public/Last_Month_expense_Analysis_oeI</members>
+		<members>unfiled$public/Month_wise_personne_use_expenses_till_8px</members>
+		<members>unfiled$public/Overall_Expenses_summary_xLE</members>
+		<members>unfiled$public/Overall_FY_20212022_summary_ITl</members>
+		<members>unfiled$public/Overall_transactions_summary_fLS</members>
+		<members>unfiled$public/Present_Month_Expense_Analysis_t2G</members>
+		<members>unfiled$public/Present_month_summary_F3l</members>
+		<members>unfiled$public/Previous_month_expense_analysis_hlC</members>
+		<members>unfiled$public/Savings_Distribution_AXr</members>
+		<members>unfiled$public/Unpaid_Transactions_MiY</members>
+		<name>Report</name>
+	</types>
+	<types>
+		<members>Finanacial_year_expense_summary</members>
+		<name>ReportType</name>
+	</types>
+	<version>65.0</version>
+</Package>
