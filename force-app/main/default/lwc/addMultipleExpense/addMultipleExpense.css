@@ -1,0 +1,39 @@
+.tile-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tile {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 8px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    width: calc(100% / 3 - 16px); /* Adjust the width based on the number of tiles per row */
+}
+
+.tile h2 {
+    margin: 0;
+    font-size: 1.25em;
+}
+
+.tile p {
+    margin: 0.5em 0 0;
+    font-size: 1em;
+}
+.positive {
+    color: green;
+}
+.negative {
+    color: red;
+}
+.lgc-bg {
+    background-color: rgb(242 242 242);
+}
+
+.lgc-bg-inverse {
+    background-color: rgb(22 50 92);
+}
+.bold-text {
+    font-weight: bold;
+}

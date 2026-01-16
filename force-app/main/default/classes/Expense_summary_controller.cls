@@ -113,6 +113,58 @@ public without sharing class Expense_summary_controller {
         System.debug('hhh presentMonthTotal '+summary.presentMonthTotal);
         return summary;
     } 
+     @AuraEnabled(cacheable=false)
+    public static List<catogoryWrapper> analyzeExpenditure()
+    {   
+        List<catogoryWrapper> summaries =  new List<catogoryWrapper>();
+        Date today = Date.today();
+        Date firstOfLastMonth = today.toStartOfMonth().addMonths(-1);
+        String SELF = 'Self';
+        String query = 'Select Id, Name,Expense_Amount__c,Category__c,Date__c,Return_Status__c From Expense__c WHERE Date__c >= :firstOfLastMonth AND Date__c <= :today AND Return_Status__c= :SELF ORDER BY Date__c';
+        List<String> catogories = getPicklistValues('Expense__c', 'Category__c') ;
+        List<Expense__c> expenses = Database.query(query);
+        Map<String,Map<String,Integer>> catogoryValues = new  Map<String,Map<String,Integer>>();
+        for(String catogory: catogories){
+           Map<String,Integer> catogorySumValues = new Map<String,Integer>();
+            for(Expense__c exp:expenses){
+                System.debug('hhh exp '+exp);
+                if(exp.Category__c != null && exp.Category__c == catogory && exp.Date__c>=today.toStartOfMonth()){
+                    if(catogorySumValues!=null && !catogorySumValues.isEmpty()  &&  catogorySumValues.containsKey('thisMonthTotal')){
+                        Integer sum = catogorySumValues.get('thisMonthTotal')+(Integer)exp.Expense_Amount__c;
+                        catogorySumValues.put('thisMonthTotal',sum);
+                    }
+                    else{
+                        catogorySumValues.put('thisMonthTotal',(Integer)exp.Expense_Amount__c);
+                    }
+                }
+                else if(exp.Category__c != null && exp.Category__c == catogory && exp.Date__c<=today.toStartOfMonth()){
+                    if(catogorySumValues!=null && !catogorySumValues.isEmpty()  &&  catogorySumValues.containsKey('lastMonthTotal')){
+                        Integer sum = catogorySumValues.get('lastMonthTotal')+(Integer)exp.Expense_Amount__c;
+                        catogorySumValues.put('lastMonthTotal',sum);
+                    }
+                    else{
+                        catogorySumValues.put('lastMonthTotal',(Integer)exp.Expense_Amount__c);
+                    }
+                }
+            }
+            if(catogorySumValues != null && !catogorySumValues.isEmpty()){
+                System.debug('hhh catogorySumValues '+catogorySumValues);
+                catogoryValues.put(catogory,catogorySumValues);
+                catogoryWrapper summary = new catogoryWrapper();
+                summary.catogory = catogory;
+                summary.lastMonthTotal = (Integer)catogoryValues.get(catogory).get('lastMonthTotal');
+                summary.thisMonthTotal = (Integer)catogoryValues.get(catogory).get('thisMonthTotal');
+                summary.diffAmount = (summary.lastMonthTotal != null && summary.thisMonthTotal != null ) ? summary.thisMonthTotal- summary.lastMonthTotal : 0;
+                summary.percentChange =  (summary.diffAmount != null && summary.lastMonthTotal != null ) ? (Double)((((Double)summary.diffAmount/(Double)summary.lastMonthTotal)*100)) : 0;
+                summary.result = (summary.diffAmount < 0)? true: false;
+                summaries.add(summary);
+
+            }
+        }
+        System.debug('hhh summaries '+summaries);
+        return summaries;
+    } 
+
     public class summaryWrappers {
         @AuraEnabled public Integer familyContribution=0;
         @AuraEnabled public Integer ownExpenditure=0;
@@ -148,10 +200,43 @@ public without sharing class Expense_summary_controller {
         @AuraEnabled public Integer presentMonthTotal=0;
         @AuraEnabled public Integer presentMonthSavings=0;
    }
-
+    public class catogoryWrapper {
+        @AuraEnabled public String  catogory;
+        @AuraEnabled public Integer lastMonthTotal=0;
+        @AuraEnabled public Integer thisMonthTotal=0;
+        @AuraEnabled public Integer diffAmount=0;
+        @AuraEnabled public Double  percentChange=0;
+        @AuraEnabled public Boolean result ;
+    }
    public static Integer noOfMonths(){
-    Date startDate = Date.newInstance(2021, 5, 27);
-    Date today = System.today();
-    return  (startDate.monthsBetween(today));
+        Date startDate = Date.newInstance(2021, 5, 27);
+        Date today = System.today();
+        return (startDate.monthsBetween(today));
    }
+   public static List<String> getPicklistValues(String objectName, String fieldName) {
+        List<String> picklistValues = new List<String>();
+
+        // Describe the SObject
+        Schema.SObjectType sObjectType = Schema.getGlobalDescribe().get(objectName);
+        if (sObjectType == null) {
+            throw new IllegalArgumentException('Invalid object name');
+        }
+
+        // Describe the fields of the SObject
+        Schema.DescribeSObjectResult describeResult = sObjectType.getDescribe();
+        Schema.DescribeFieldResult fieldResult = Expense__c.Category__c.getDescribe();
+        if (fieldResult == null) {
+            throw new IllegalArgumentException('Invalid field name');
+        }
+        if (fieldResult.getType() == Schema.DisplayType.Picklist) {
+            // Retrieve picklist values
+            List<Schema.PicklistEntry> picklistEntries = fieldResult.getPicklistValues();
+            for (Schema.PicklistEntry entry : picklistEntries) {
+                picklistValues.add(entry.getValue());
+            }
+        } else {
+            throw new IllegalArgumentException('Field is not a picklist');
+        }
+        return picklistValues;
+    }
 }

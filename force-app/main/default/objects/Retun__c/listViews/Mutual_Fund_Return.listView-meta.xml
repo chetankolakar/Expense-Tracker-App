@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mutual_Fund_Return</fullName>
+    <columns>Date__c</columns>
+    <columns>NAME</columns>
+    <columns>Return_type__c</columns>
+    <columns>Profit__c</columns>
+    <filterScope>Mine</filterScope>
+    <label>Mutual Fund Return</label>
+</ListView>
