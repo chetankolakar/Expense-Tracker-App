@@ -8,7 +8,7 @@ public with sharing class expensesTriggerHandler {
                 else if(exp.RecordTypeId=='0125i0000001uSoAAI'){
                     exp.Return_Status__c='Self';
                 }
-            }
+            }//
         }
     }
     public static void updateOutStandingAmount(List<Expense__c> newList,Map<Id,Expense__c> oldMap,Map<Id,Expense__c> newMap){
